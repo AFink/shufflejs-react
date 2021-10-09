@@ -118,7 +118,7 @@ class Core extends Component {
 
   render() {
     const { taxonomiesBodyTypeNames } = this.state;
-    const { children, itemSelector, sortAllText = 'All' } = this.props;
+    const { children, itemSelector, sortAllText } = this.props;
     return (
       <div className="sort-mainblock">
         <div className="sort-mainblock__sorting">
@@ -142,13 +142,10 @@ Core.propTypes = {
   // taxonomies: PropTypes.arrayOf(PropTypes.object).isRequired,
   taxonomies: PropTypes.objectOf(PropTypes.object).isRequired,
   itemSelector: PropTypes.string.isRequired,
-  sortAllText: PropTypes.string,
+  sortAllText: PropTypes.string.isRequired,
   // children: PropTypes.element.isRequired
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.array,
   ]).isRequired
-};
-Core.defaultProps = {
-  sortAllText: 'All',
 };

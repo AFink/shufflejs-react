@@ -40,5 +40,5 @@ SortFilter.propTypes = {
 
 SortFilter.defaultProps = {
   defaultSort: '',
-  sortAllText: '',
+  sortAllText: 'All',
 };

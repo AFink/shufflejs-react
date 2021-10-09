@@ -8,7 +8,6 @@
  */
 export const jsUcfirst = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
-
 /**
  * Remove tag from string
  * e.g. "<p>test</p>"
