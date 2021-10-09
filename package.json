@@ -1,6 +1,6 @@
 {
-  "name": "shufflejs-react",
-  "version": "0.2.4",
+  "name": "@finki70/shufflejs-react",
+  "version": "0.2.5",
   "description": "React component for ShuffleJs",
   "main": "./lib/index.js",
   "scripts": {
@@ -41,19 +41,19 @@
     "javascript",
     "react"
   ],
-  "author": "Aricode00 <aricode00@gmail.com>",
+  "author": "Andreas Fink <mail@afink.dev>, Aricode00 <aricode00@gmail.com>",
   "license": "MIT",
   "engines": {
     "node": "12.6.0",
     "npm": "6.9.0"
   },
   "bugs": {
-    "url": "https://github.com/ar-to/shufflejs-react/issues"
+    "url": "https://github.com/AFink/shufflejs-react/issues"
   },
   "nyc": {
     "exclude": "src/SortFilter/**/*.js"
   },
-  "homepage": "https://ar-to.github.io/shufflejs-react/",
+  "homepage": "https://github.com/AFink/shufflejs-react",
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.8.3",

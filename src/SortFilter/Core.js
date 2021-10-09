@@ -1,16 +1,7 @@
-// const React = window.React;
-// const ReactDOM = window.ReactDOM;
-// const Component = React.Component;
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Shuffle from 'shufflejs';
 import SortButtons from './SortButtons';
-import { jsUcfirst, putSearchParams } from '../Utils';
-// import Search from './Search';
-// import SelectBoxes from './SelectBoxes';
-
-// const Shuffle = window.Shuffle;
-// const { Shuffle } = window;
 
 class Core extends Component {
   constructor(props) {
@@ -38,18 +29,18 @@ class Core extends Component {
   }
 
   componentDidMount() {
-    // let options = {
-    //   // reverse: true,
-    //   by: this._byFunction
-    // }
+    const options = {
+      // reverse: true,
+      by: this._byFunction
+    };
     const { itemSelector } = this.props;
     this.shuffle = new Shuffle(this.element.current, {
-      // itemSelector: '.sortblock',
       itemSelector: `.${itemSelector}`,
       sizer: this.sizer.current,
-      // initialSort: options
+      initialSort: options,
+      speed: 750,
     });
-    this.sortFromUrlSearch();
+    // this.sortFromUrlSearch();
   }
 
   componentDidUpdate() {
@@ -70,61 +61,35 @@ class Core extends Component {
     const dataArray = JSON.parse(dataGroups);// array
     // const defaultValue = dataArray.find((value) => {return value === this.props.defaultSort;});
     const defaultValue = dataArray.find((value) => value === defaultSort);
-    // console.log('defaultValuess',defaultValue)
+    // console.log('defaultValuess', defaultValue)
+
     return defaultValue;
   }
-
-
-  /**
-   * Search handlers via shufflejs filter
-   * Get search text from input value
-   * Use shufflejs filter function to filters by name
-   * @param {Object} evt is the event element object to get target information
-   * @return {boolean} - if true it will sort
-   */
-  handleSearchKeyup = (evt) => {
-    const searchText = evt.target.value.toLowerCase();
-
-    function filterCallback(element) {
-      const titleElement = element.querySelector('.sortblock__title');
-      const titleText = titleElement.textContent.toLowerCase().trim();
-      return titleText.indexOf(searchText) !== -1;
-    }
-
-    this.shuffle.filter(filterCallback);
-  };
 
   /**
    * Sort by the text node within the targeted element
    * @param {Object} e to the event target of the element
    */
   sortByName = (e) => {
-    // e.preventDefault();
-    putSearchParams(e.target.textContent);
-    this.sortFromUrlSearch();
+    e.preventDefault();
+
+    const filter = e.target.textContent;
+    this.toggleActiveClasses(e, filter);
+
+    return this.shuffle.filter(filter);
   };
 
-  /**
-   * Sort by the specific text
-   * @param {string} text
-   */
-  sortByText = (text) => {
-    putSearchParams(text);
-    this.sortFromUrlSearch();
-  };
+  toggleActiveClasses = (event, filter) => {
+    const buttons = event.target.parentNode.parentNode.children;
 
-  /**
-   * filter the shuffle by the search params of the url
-   * checks if the search params exists else it defaults
-   */
-  sortFromUrlSearch = () => {
-    const searchParams = jsUcfirst(window.location.search.slice(1));
-    const { defaultSort } = this.props;
-    if (searchParams) {
-      return this.shuffle.filter(searchParams);
+    for (const button of buttons) {
+      if (button.childNodes[0].innerHTML.toLowerCase() === filter.toLowerCase()) {
+        button.childNodes[0].classList.add('active');
+      } else {
+        button.childNodes[0].classList.remove('active');
+      }
     }
-    return this.shuffle.filter(defaultSort);
-  };
+  }
 
   /**
    * Show all elements using shufflejs provided string
@@ -132,16 +97,11 @@ class Core extends Component {
    */
   sortAll = (e) => {
     e.preventDefault();
-    putSearchParams('');
-    this.shuffle.filter(Shuffle.ALL_ITEMS);
-  }
 
-  /**
-   * Specific for the PageLoading Component demo
-   * makes the button link hide/display text
-   */
-  toggleSlide = () => {
-    this.slider.classList.toggle('slider-closed');
+    const filter = Shuffle.ALL_ITEMS;
+    this.toggleActiveClasses(e, filter);
+
+    this.shuffle.filter(filter);
   }
 
   /**
@@ -158,14 +118,12 @@ class Core extends Component {
 
   render() {
     const { taxonomiesBodyTypeNames } = this.state;
-    const { children, itemSelector } = this.props;
+    const { children, itemSelector, sortAllText = 'All' } = this.props;
     return (
       <div className="sort-mainblock">
         <div className="sort-mainblock__sorting">
           <div className="row">
-            {/* <Search onKeyUp={this.handleSearchKeyup} /> */}
-            <SortButtons onClickByName={this.sortByName} onClickAll={this.sortAll} taxonomies={taxonomiesBodyTypeNames} allTrue sortAllText="All" />
-            {/* <SelectBoxes onClickByName={this.sortByText} taxonomies={taxonomies} /> */}
+            <SortButtons onClickByName={this.sortByName} onClickAll={this.sortAll} taxonomies={taxonomiesBodyTypeNames} allTrue sortAllText={sortAllText} />
           </div>
         </div>
         <div ref={this.element} className="row" classtosort={itemSelector}>
@@ -184,9 +142,13 @@ Core.propTypes = {
   // taxonomies: PropTypes.arrayOf(PropTypes.object).isRequired,
   taxonomies: PropTypes.objectOf(PropTypes.object).isRequired,
   itemSelector: PropTypes.string.isRequired,
+  sortAllText: PropTypes.string,
   // children: PropTypes.element.isRequired
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.array,
   ]).isRequired
+};
+Core.defaultProps = {
+  sortAllText: 'All',
 };

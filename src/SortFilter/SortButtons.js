@@ -16,10 +16,11 @@ export default function SortButtons(props) {
   } = props;
   return (
     <div id="sjsr-sort-button" className="col-md-12 procedure-main margin--5tb">
-      <div className="procedure-main__label flex padding--5lr">Sort by Procedures</div>
-      {titleButton ? <div>{titleButton}</div> : null }
-      {taxonomiesArray.map((taxonomy, index) => <button key={index} type="button" className="btn btn-outline-secondary btn-sm margin--5" onClick={onClickByName}>{jsUcfirst(taxonomy)}</button>)}
-      {allTrue ? <button type="button" className="btn btn-outline-secondary btn-sm margin--5" onClick={onClickAll}>{sortAllText}</button> : null }
+      {titleButton ? <div>{titleButton}</div> : null}
+      <ul className="nav nav-pills">
+        {allTrue ? <li key="all" className="nav-item"><button type="button" className="nav-link active" onClick={onClickAll}>{sortAllText}</button></li> : null}
+        {taxonomiesArray.map((taxonomy, index) => <li key={index} className="nav-item"><button type="button" className="nav-link" onClick={onClickByName}>{jsUcfirst(taxonomy)}</button></li>)}
+      </ul>
     </div>
   );
 }
